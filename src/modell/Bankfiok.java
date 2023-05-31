@@ -36,7 +36,7 @@ public class Bankfiok {
     public void leszerel(String azon) {
         automatak.remove(keres(azon));
     }
-    private int keres(String azon) {
+    public int keres(String azon) {
         boolean nincsMeg = true;
         int i = 0;
         int valasz = -1;

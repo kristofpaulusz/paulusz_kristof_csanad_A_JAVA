@@ -5,6 +5,7 @@
 package nezet;
 
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import modell.Automata;
 import modell.Bankfiok;
 
@@ -13,15 +14,18 @@ import modell.Bankfiok;
  * @author Admin227
  */
 public class GuiForm extends javax.swing.JFrame {
-
-    private ArrayList<Automata> automatak;
+    private static Bankfiok ba;
     public GuiForm() {
         initComponents();
     }
 
     GuiForm(ArrayList<Automata> modelAutomatak) {
         this();
-        automatak = modelAutomatak;
+        DefaultComboBoxModel dcbm = new DefaultComboBoxModel();
+        for (Automata automata : modelAutomatak) {
+            dcbm.addElement(automata.getAzonosito());
+        }
+        automatCB.setModel(dcbm);
         
     }
 
@@ -34,18 +38,24 @@ public class GuiForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox<>();
+        automatCB = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        osszegLbl = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         saveMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        automatCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                automatCBActionPerformed(evt);
+            }
+        });
+
         jLabel1.setText("Autómaták:");
         jLabel1.setToolTipText("");
 
-        jLabel2.setText("összeg:");
+        osszegLbl.setText("összeg:");
 
         saveMenu.setText("Mentés");
         jMenuBar1.add(saveMenu);
@@ -61,9 +71,9 @@ public class GuiForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(automatCB, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel2)))
+                        .addComponent(osszegLbl)))
                 .addContainerGap(112, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -73,13 +83,17 @@ public class GuiForm extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(automatCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(osszegLbl))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void automatCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automatCBActionPerformed
+        osszegLbl.setText(String.format("Összeg: %d Ft", ba.getAutomatak().get(ba.keres(automatCB.getSelectedItem().toString())).getPenzosszeg()));
+    }//GEN-LAST:event_automatCBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -111,7 +125,7 @@ public class GuiForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Bankfiok ba = new Bankfiok();
+                ba = new Bankfiok();
                 ba.frissit();
                 new GuiForm(ba.getAutomatak()).setVisible(true);
             }
@@ -119,10 +133,10 @@ public class GuiForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> automatCB;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel osszegLbl;
     private javax.swing.JMenu saveMenu;
     // End of variables declaration//GEN-END:variables
 }
