@@ -1,0 +1,4 @@
+Autómaták állapota:
+	Automata{azonosito=BP202301, penzosszeg=10000000}
+	Automata{azonosito=BP202302, penzosszeg=20000000}
+	Automata{azonosito=SH231501, penzosszeg=5000000}

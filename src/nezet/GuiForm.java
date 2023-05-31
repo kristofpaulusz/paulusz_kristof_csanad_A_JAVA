@@ -4,8 +4,15 @@
  */
 package nezet;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import modell.Automata;
 import modell.Bankfiok;
 
@@ -14,7 +21,7 @@ import modell.Bankfiok;
  * @author Admin227
  */
 public class GuiForm extends javax.swing.JFrame {
-    private static Bankfiok ba;
+    private static Bankfiok bf;
     public GuiForm() {
         initComponents();
     }
@@ -43,6 +50,7 @@ public class GuiForm extends javax.swing.JFrame {
         osszegLbl = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         saveMenu = new javax.swing.JMenu();
+        saveMI = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,6 +66,21 @@ public class GuiForm extends javax.swing.JFrame {
         osszegLbl.setText("összeg:");
 
         saveMenu.setText("Mentés");
+        saveMenu.setActionCommand("Fájl");
+        saveMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMenuActionPerformed(evt);
+            }
+        });
+
+        saveMI.setText("Mentés");
+        saveMI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMIActionPerformed(evt);
+            }
+        });
+        saveMenu.add(saveMI);
+
         jMenuBar1.add(saveMenu);
 
         setJMenuBar(jMenuBar1);
@@ -92,8 +115,36 @@ public class GuiForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void automatCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_automatCBActionPerformed
-        osszegLbl.setText(String.format("Összeg: %d Ft", ba.getAutomatak().get(ba.keres(automatCB.getSelectedItem().toString())).getPenzosszeg()));
+        osszegLbl.setText(String.format("Összeg: %d Ft", bf.getAutomatak().get(bf.keres(automatCB.getSelectedItem().toString())).getPenzosszeg()));
     }//GEN-LAST:event_automatCBActionPerformed
+
+    private void saveMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuActionPerformed
+       
+    }//GEN-LAST:event_saveMenuActionPerformed
+
+    private void saveMIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMIActionPerformed
+         JFileChooser jfcs = new JFileChooser();
+        int valasztas = jfcs.showSaveDialog(this);
+        if (valasztas == JFileChooser.APPROVE_OPTION ) {
+            
+            try {
+                Files.createFile(jfcs.getSelectedFile().toPath());
+                BufferedWriter myWriter = Files.newBufferedWriter(jfcs.getSelectedFile().toPath());
+                
+                myWriter.write("Autómaták állapota:\n");
+            for (Automata automata : bf.getAutomatak()) {
+                myWriter.write("\t"+automata.toString()+"\n");
+            }
+
+                
+                
+                myWriter.close();
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(GuiForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
+            
+        }
+    }//GEN-LAST:event_saveMIActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,9 +176,9 @@ public class GuiForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ba = new Bankfiok();
-                ba.frissit();
-                new GuiForm(ba.getAutomatak()).setVisible(true);
+                bf = new Bankfiok();
+                bf.frissit();
+                new GuiForm(bf.getAutomatak()).setVisible(true);
             }
         });
     }
@@ -137,6 +188,7 @@ public class GuiForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel osszegLbl;
+    private javax.swing.JMenuItem saveMI;
     private javax.swing.JMenu saveMenu;
     // End of variables declaration//GEN-END:variables
 }
